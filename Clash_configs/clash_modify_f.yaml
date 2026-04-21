@@ -1,0 +1,84 @@
+port: 7890
+socks-port: 7891
+allow-lan: false
+mode: Rule
+log-level: debug
+external-controller: 127.0.0.1:9090
+experimental:
+  ignore-resolve-fail: true
+hosts:
+  mtalk.google.com: 108.177.125.188
+# dns:
+#   enable: true
+#   nameserver:
+#     - 223.5.5.5
+#     - 119.29.29.29
+#   fallback:
+#     - tls://1.1.1.1:853
+#  enhanced-mode: redir-host
+proxies:
+  - name: Workspace-net-Founder
+    type: http
+    server: npss.sindcs.top
+    port: 32332
+    udp: true
+  - name: Workspace-IP-Founder
+    type: http
+    server: 192.168.201.252
+    port: 1808
+    udp: true
+  - name: Workspace-inIP-Founder
+    type: http
+    server: 192.168.201.64
+    port: 1808
+    udp: true
+  - name: Workspace-inIP2-Founder
+    type: http
+    server: 192.168.201.18
+    port: 1808
+    udp: true
+  - name: Workspace-IP-DVLP
+    type: http
+    server: 172.18.247.111
+    port: 20014
+    udp: true
+proxy-groups:
+  - name: 自动选择快速节点
+    type: url-test
+    proxies:
+      - Workspace-net-Founder
+      - Workspace-IP-Founder
+      - Workspace-inIP-Founder
+      - Workspace-inIP2-Founder
+    url: http://zx4a.cmos.cmcc/user/login
+    interval: 300
+  - name: PROXY
+    type: select
+    proxies:
+      - Workspace-net-Founder
+      - Workspace-IP-Founder
+      - Workspace-inIP-Founder
+      - Workspace-IP-DVLP
+      - Workspace-inIP2-Founder
+      - DIRECT
+rules:
+  - PROCESS-NAME,vmware,PROXY
+  - PROCESS-NAME,vmware-view.exe,PROXY
+  - PROCESS-NAME,horizon-client.exe,PROXY
+  - PROCESS-NAME,HDPClient.exe,PROXY
+  # - IP-CIDR,172.22.207.244/32,PROXY
+  # - IP-CIDR,172.18.181.139/32,PROXY
+  # - IP-CIDR,172.22.176.179/32,PROXY
+  # - IP-CIDR,172.20.126.247/32,PROXY
+  # - IP-CIDR,172.22.128.242/32,PROXY
+  # - IP-CIDR,172.22.165.92/32,PROXY
+  - IP-CIDR,192.168.27.47/32,PROXY
+  - IP-CIDR,172.18.181.139/32,PROXY
+  - IP-CIDR,172.18.181.137/32,PROXY
+  - DOMAIN-KEYWORD,online-cmcc,PROXY
+  - DOMAIN-KEYWORD,cmos,PROXY
+  - DOMAIN-KEYWORD,cmcc,PROXY
+  - DOMAIN-KEYWORD,vmware.com,PROXY
+  - MATCH,DIRECT
+cfw-bypass: null
+cfw-latency-timeout: 5000
